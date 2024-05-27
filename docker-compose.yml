@@ -1,0 +1,39 @@
+version: "3"
+
+
+services: 
+  # app:
+  #   build: .
+  #   command: npm run start:dev
+  #   ports:
+  #     - "3000:3000"
+  #   network_mode: host
+  #   volumes:
+  #     - .:/usr/app
+  #   depends_on:
+  #     - redis
+
+  redis:
+    image: "redis:latest"
+    container_name: "redis"
+    ports:
+      - "9393:6379"
+    volumes:
+      - redis-data:/data
+    environment:
+      - REDIS_PASSWORD=redis
+    command: ["redis-server", "--requirepass", "redis"]
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"   # Porta padrão do RabbitMQ
+      - "15672:15672" # Porta da interface de gerenciamento do RabbitMQ
+    environment:
+      - RABBITMQ_DEFAULT_USER=root
+      - RABBITMQ_DEFAULT_PASS=root
+
+volumes:
+  redis-data:
+    driver: local
